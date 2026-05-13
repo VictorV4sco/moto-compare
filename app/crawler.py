@@ -4,9 +4,9 @@ from bs4 import BeautifulSoup
 from playwright.sync_api import sync_playwright
 
 
-def fetch_html_with_browser(url: str) -> str:
+def fetch_html_with_browser(url: str, headless: bool = True) -> str:
     with sync_playwright() as p:
-        browser = p.chromium.launch(headless=False)
+        browser = p.chromium.launch(headless=headless)
 
         page = browser.new_page(locale="pt-BR")
 

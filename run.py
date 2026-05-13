@@ -1,18 +1,12 @@
-from app.brands import BRANDS
-from app.crawler import get_internal_links, filter_possible_model_links
+from app.crawler import fetch_html_with_browser
+from app.extractors.honda import extract_honda_catalog
 
 
-brand = BRANDS["honda"]
+url = "https://www.honda.com.br/motos/modelos"
 
-links = get_internal_links(
-    base_url=brand["base_url"],
-    allowed_domains=brand["allowed_domains"],
-)
+html = fetch_html_with_browser(url, headless=False)
 
-model_links = filter_possible_model_links(links)
+catalog = extract_honda_catalog(html, url)
 
-print(f"Links encontrados: {len(links)}")
-print(f"Possíveis modelos: {len(model_links)}")
-
-for link in model_links:
-    print(link)
+for item in catalog:
+    print(item)
