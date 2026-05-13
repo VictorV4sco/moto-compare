@@ -10,18 +10,21 @@ def fetch_html_with_browser(url: str, headless: bool = True) -> str:
 
         page = browser.new_page(locale="pt-BR")
 
-        page.goto("https://www.honda.com.br/motos/modelos", wait_until="domcontentloaded", timeout=60000)
+        page.goto(url, wait_until="domcontentloaded", timeout=60000)
         page.wait_for_timeout(5000)
-        html = page.content()
 
-        with open("debug_honda.html", "w", encoding="utf-8") as file:
-            file.write(html)
+        html = page.content()
 
         browser.close()
         return html
 
-def get_internal_links(base_url: str, allowed_domains: list[str]) -> list[str]:
-    html = fetch_html_with_browser(base_url)
+
+def get_internal_links(
+    base_url: str,
+    allowed_domains: list[str],
+    headless: bool = True,
+) -> list[str]:
+    html = fetch_html_with_browser(base_url, headless=headless)
 
     soup = BeautifulSoup(html, "lxml")
     links = set()
